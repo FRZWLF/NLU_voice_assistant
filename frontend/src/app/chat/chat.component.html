@@ -1,0 +1,13 @@
+<main>
+  <div>
+    <input [(ngModel)]="userMessage" placeholder="Schreibe etwas...">
+    <button (click)="sendMessage()">Senden</button>
+  </div>
+  <div>
+    <ul>
+      <li *ngFor="let message of messages">
+        <strong>{{ message.sender }}:</strong> {{ message.text }}
+      </li>
+    </ul>
+  </div>
+</main>
