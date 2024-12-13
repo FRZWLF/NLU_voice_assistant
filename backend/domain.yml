@@ -8,6 +8,20 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
+  - ask_time
+  - ask_time_in_location
+
+#entities:
+
+
+#safe for later uses in conversation
+#slots:
+#  location:
+#    type: text
+#    influence_conversation: false
+#    mappings:
+#      - type: from_entity
+#        entity: location
 
 responses:
   utter_greet:
@@ -28,6 +42,15 @@ responses:
 
   utter_iamabot:
   - text: "Ich bin ein bot, powered by Rasa."
+
+  utter_ask_time:
+    - text: "Es ist jetzt {current_time}."
+
+  utter_location_not_found:
+    - text: "Ich konnte die Uhrzeit für {location} nicht finden. Bitte versuche eine andere Stadt."
+
+actions:
+  - action_tell_time
 
 session_config:
   session_expiration_time: 60

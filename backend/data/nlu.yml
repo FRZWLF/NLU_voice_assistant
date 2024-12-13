@@ -85,3 +85,25 @@ nlu:
     - bist du ein Mensch?
     - spreche ich mit einem Bot?
     - spreche ich mit einem Menschen?
+
+- intent: ask_time
+  examples: |
+    - wie spät ist es
+    - wie viel Uhr ist es gerade
+    - aktuelle uhrzeit
+    - Sag mir die aktuelle Uhrzeit
+    - welche Zeit ist jetzt
+
+- intent: ask_time_in_location
+  examples: |
+    - wie spät ist es in Berlin
+    - uhrzeit in New York
+    - wie viel Uhr ist es in London
+    - wie ist die Zeit in New York
+    - was ist die aktuelle Uhrzeit in Dublin
+    - welche Zeit ist in New York City
+    - wie viel Uhr ist es jetzt in Los Angeles
+    - kannst du mir die Uhrzeit für San Francisco sagen
+    - wie spät ist es jetzt in Chicago
+    - was ist die Uhrzeit in Ohio
+    - kannst du mir die Zeit für Houston sagen?

@@ -1,27 +1,62 @@
-# This files contains your custom actions which can be used to run
-# custom Python code.
-#
 # See this guide on how to implement these action:
 # https://rasa.com/docs/rasa/custom-actions
+import datetime
+import requests
+from rasa_sdk import Action
+from rasa_sdk.events import SlotSet
+
+TIMEZONEDB_API_KEY = "WSBAFOWS1DLC"
+
+class ActionTellTime(Action):
+    def name(self) -> str:
+        return "action_tell_time"
 
 
-# This is a simple example for a custom action which utters "Hello World!"
 
-# from typing import Any, Text, Dict, List
-#
-# from rasa_sdk import Action, Tracker
-# from rasa_sdk.executor import CollectingDispatcher
-#
-#
-# class ActionHelloWorld(Action):
-#
-#     def name(self) -> Text:
-#         return "action_hello_world"
-#
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#
-#         dispatcher.utter_message(text="Hello World!")
-#
-#         return []
+    def run(self, dispatcher, tracker, domain):
+        entities = tracker.latest_message["entities"]
+        print(f"DEBUG: Zusammengeführte Location: {entities}")
+        # Suche nach zusammenhängenden location-Entitäten
+        location_parts = [ent["value"] for ent in entities if ent["entity"] == "LOC"]
+        if location_parts:
+            # Kombiniere die Ortsnamen-Teile direkt (wenn notwendig)
+            location = " ".join(location_parts)
+        else:
+            # Keine Entität gefunden -> Gib aktuelle Uhrzeit zurück
+            current_time = datetime.datetime.now().strftime("%H:%M")
+            dispatcher.utter_message(text=f"Es ist jetzt {current_time}.")
+            return []
+        print(f"DEBUG: Zusammengeführte Location: {location}")
+
+        if location:
+            try:
+                # Schritt 1: Geokodierung mit OpenStreetMap (Nominatim API)
+                geocode_url = f"https://nominatim.openstreetmap.org/search?q={location}&format=json&addressdetails=1"
+                geocode_response = requests.get(geocode_url, headers={"User-Agent": "TimeFinder/1.0"})
+                geocode_response.raise_for_status()
+                geocode_data = geocode_response.json()
+
+                if not geocode_data:
+                    return f"Ich konnte den Ort '{location}' nicht finden."
+
+                # Extrahiere Breiten- und Längengrad
+                latitude = geocode_data[0]["lat"]
+                longitude = geocode_data[0]["lon"]
+
+                #if matching_timezone:
+                time_response = requests.get(f"http://api.timezonedb.com/v2.1/get-time-zone?key={TIMEZONEDB_API_KEY}&format=json&by=position&lat={latitude}&lng={longitude}", timeout=10)
+                time_response.raise_for_status()
+                time_data = time_response.json()
+                print(f"Debug: API Response = {time_data}")
+                if time_data["status"] == "OK":
+                    current_time = time_data["formatted"].split(" ")[1][:5]  # Zeit im Format HH:MM
+                    dispatcher.utter_message(text=f"In {location} ist es jetzt {current_time}.")
+                else:
+                    dispatcher.utter_message(text="Es gab ein Problem mit der Zeit-API.")
+            except Exception as e:
+                dispatcher.utter_message(text="Es gab ein Problem beim Aufruf der Zeit.")
+                print(f"Fehler: {e}")
+        else:
+            current_time = datetime.datetime.now().strftime("%H:%M")
+            dispatcher.utter_message(text=f"Es ist jetzt {current_time}.")
+        return [SlotSet("location", None)]

@@ -11,3 +11,10 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+
+- rule: Prioritize ask_time_in_location when location is detected
+  condition:
+    - active_loop: null
+  steps:
+    - intent: ask_time_in_location
+    - action: action_tell_time
