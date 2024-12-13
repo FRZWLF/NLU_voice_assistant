@@ -107,3 +107,23 @@ nlu:
     - wie spät ist es jetzt in Chicago
     - was ist die Uhrzeit in Ohio
     - kannst du mir die Zeit für Houston sagen?
+
+- intent: ask_location
+  examples: |
+    - wo bin ich
+    - wo befinde ich mich
+    - wo sind wir hier
+    - wo befinden wir uns
+    - was ist mein aktueller Standort
+
+- intent: ask_wiki
+  examples: |
+    - weißt du was über 
+    - weißt du etwas über 
+    - wer ist 
+    - was ist 
+    - erzähle mir was über
+    - kennst du
+    - was weißt du über
+    - erzähl mir etwas über
+    - gib mir Informationen über

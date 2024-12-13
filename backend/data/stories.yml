@@ -27,14 +27,34 @@ stories:
   - action: utter_cheer_up
   - action: utter_did_that_help
   - intent: deny
-  - action: utter_goodbye
+  - action: utter_end_by_deny
+
 
 - story: Ask time
   steps:
     - intent: ask_time
     - action: action_tell_time
 
+
 - story: Ask time in location
   steps:
   - intent: ask_time_in_location
   - action: action_tell_time
+
+
+- story: Ask location
+  steps:
+    - intent: ask_location
+    - action: action_tell_location
+
+
+- story: Ask wiki
+  steps:
+    - intent: ask_wiki
+    - action: action_tell_wiki
+    - slot_was_set:
+        - wiki_query: name
+    - or:
+        - intent: affirm
+        - intent: deny
+    - action: action_tell_more_wiki

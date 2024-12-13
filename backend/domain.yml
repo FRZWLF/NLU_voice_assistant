@@ -10,18 +10,15 @@ intents:
   - bot_challenge
   - ask_time
   - ask_time_in_location
+  - ask_location
+  - ask_wiki
 
-#entities:
-
-
-#safe for later uses in conversation
-#slots:
-#  location:
-#    type: text
-#    influence_conversation: false
-#    mappings:
-#      - type: from_entity
-#        entity: location
+slots:
+  wiki_query:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
 
 responses:
   utter_greet:
@@ -43,14 +40,14 @@ responses:
   utter_iamabot:
   - text: "Ich bin ein bot, powered by Rasa."
 
-  utter_ask_time:
-    - text: "Es ist jetzt {current_time}."
-
-  utter_location_not_found:
-    - text: "Ich konnte die Uhrzeit für {location} nicht finden. Bitte versuche eine andere Stadt."
+  utter_end_by_deny:
+    - text: "Okay, lass mich wissen, falls ich dir noch weiterhelfen kann!"
 
 actions:
   - action_tell_time
+  - action_tell_location
+  - action_tell_wiki
+  - action_tell_more_wiki
 
 session_config:
   session_expiration_time: 60
