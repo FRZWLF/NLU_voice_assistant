@@ -12,6 +12,7 @@ intents:
   - ask_time_in_location
   - ask_location
   - ask_wiki
+  - ask_weather
 
 slots:
   wiki_query:
@@ -48,6 +49,7 @@ actions:
   - action_tell_location
   - action_tell_wiki
   - action_tell_more_wiki
+  - action_tell_weather
 
 session_config:
   session_expiration_time: 60

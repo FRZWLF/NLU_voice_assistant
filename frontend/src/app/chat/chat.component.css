@@ -1,0 +1,18 @@
+.status-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.status-circle.ready {
+  background-color: green;
+}
+
+.status-circle.listening {
+  background-color: red;
+}
+
+.status-circle.processing {
+  background-color: orange;
+}

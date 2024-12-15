@@ -96,17 +96,17 @@ nlu:
 
 - intent: ask_time_in_location
   examples: |
-    - wie spät ist es in Berlin
-    - uhrzeit in New York
-    - wie viel Uhr ist es in London
-    - wie ist die Zeit in New York
-    - was ist die aktuelle Uhrzeit in Dublin
-    - welche Zeit ist in New York City
-    - wie viel Uhr ist es jetzt in Los Angeles
+    - wie spät ist es in
+    - uhrzeit in 
+    - wie viel Uhr ist es in 
+    - wie ist die Zeit in 
+    - was ist die aktuelle Uhrzeit in 
+    - welche Zeit ist in 
+    - wie viel Uhr ist es jetzt in 
     - kannst du mir die Uhrzeit für San Francisco sagen
-    - wie spät ist es jetzt in Chicago
-    - was ist die Uhrzeit in Ohio
-    - kannst du mir die Zeit für Houston sagen?
+    - wie spät ist es jetzt in 
+    - was ist die Uhrzeit in 
+    - kannst du mir die Zeit für Houston sagen
 
 - intent: ask_location
   examples: |
@@ -115,6 +115,8 @@ nlu:
     - wo sind wir hier
     - wo befinden wir uns
     - was ist mein aktueller Standort
+    - Standort
+    - aktueller Standort
 
 - intent: ask_wiki
   examples: |
@@ -127,3 +129,19 @@ nlu:
     - was weißt du über
     - erzähl mir etwas über
     - gib mir Informationen über
+
+- intent: ask_weather
+  examples: |
+    - wie ist das wetter in 
+    - wie ist das wetter
+    - wetter in
+    - wetter
+    - aktuelles wetter
+    - aktuelles wetter in
+    - sag mir das aktuelle wetter
+    - sag mir das aktuelle wetter in
+
+#- intent: ask_musicstream
+#  examples: |
+#    - spiel radio
+#    - spiele radiosender

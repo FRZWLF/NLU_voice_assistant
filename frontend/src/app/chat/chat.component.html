@@ -1,8 +1,11 @@
 <main>
-  <div>
-    <input [(ngModel)]="userMessage" placeholder="Schreibe etwas...">
+  <!-- Eingabefeld -->
+  <div (keydown.enter)="sendMessage()">
+    <input [(ngModel)]="userMessage" placeholder="Schreibe etwas..." />
     <button (click)="sendMessage()">Senden</button>
   </div>
+
+  <!-- Nachrichtenliste -->
   <div>
     <ul>
       <li *ngFor="let message of messages">
@@ -10,4 +13,7 @@
       </li>
     </ul>
   </div>
+
+  <!-- Statuskreis -->
+  <div class="status-circle" [ngClass]="status"></div>
 </main>

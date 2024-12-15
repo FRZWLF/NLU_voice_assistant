@@ -7,11 +7,6 @@ rules:
   - intent: goodbye
   - action: utter_goodbye
 
-#- rule: Provide help anytime the user denys an action
-#  steps:
-#    - intent: deny
-#    - action: utter_end_by_deny
-
 - rule: Say 'Ich bin ein bot' anytime the user challenges
   steps:
   - intent: bot_challenge

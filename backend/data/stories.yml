@@ -9,6 +9,7 @@ stories:
   - intent: mood_great
   - action: utter_happy
 
+
 - story: sad path 1
   steps:
   - intent: greet
@@ -18,6 +19,7 @@ stories:
   - action: utter_did_that_help
   - intent: affirm
   - action: utter_happy
+
 
 - story: sad path 2
   steps:
@@ -58,3 +60,9 @@ stories:
         - intent: affirm
         - intent: deny
     - action: action_tell_more_wiki
+
+
+- story: Ask weather
+  steps:
+    - intent: ask_weather
+    - action: action_tell_weather
