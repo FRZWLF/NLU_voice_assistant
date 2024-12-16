@@ -2,73 +2,73 @@ version: "3.1"
 
 stories:
 
-- story: happy path
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
+  - story: happy path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: mood_great
+      - action: utter_happy
 
 
-- story: sad path 1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
+  - story: sad path 1
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: mood_unhappy
+      - action: utter_cheer_up
+      - action: utter_did_that_help
+      - intent: affirm
+      - action: utter_happy
 
 
-- story: sad path 2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_end_by_deny
+  - story: sad path 2
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: mood_unhappy
+      - action: utter_cheer_up
+      - action: utter_did_that_help
+      - intent: deny
+      - action: utter_end_by_deny
 
 
-- story: Ask time
-  steps:
-    - intent: ask_time
-    - action: action_tell_time
+  - story: Ask time
+    steps:
+      - intent: ask_time
+      - action: action_tell_time
 
 
-- story: Ask time in location
-  steps:
-  - intent: ask_time_in_location
-  - action: action_tell_time
+  - story: Ask time in location
+    steps:
+      - intent: ask_time_in_location
+      - action: action_tell_time
 
 
-- story: Ask location
-  steps:
-    - intent: ask_location
-    - action: action_tell_location
+  - story: Ask location
+    steps:
+      - intent: ask_location
+      - action: action_tell_location
 
 
-- story: Ask wiki
-  steps:
-    - intent: ask_wiki
-    - action: action_tell_wiki
-    - slot_was_set:
-        - wiki_query: name
-    - or:
-        - intent: affirm
-        - intent: deny
-    - action: action_tell_more_wiki
+  - story: Ask wiki
+    steps:
+      - intent: ask_wiki
+      - action: action_tell_wiki
+      - slot_was_set:
+          - wiki_query: name
+      - or:
+          - intent: affirm
+          - intent: deny
+      - action: action_tell_more_wiki
 
 
-- story: Ask weather
-  steps:
-    - intent: ask_weather
-    - action: action_tell_weather
+  - story: Ask weather
+    steps:
+      - intent: ask_weather
+      - action: action_tell_weather
 
 
-- story: Play a radiostream
-  steps:
-    - intent: play_radiostream
-    - action: action_play_radiostream
+  - story: Play a radiostream
+    steps:
+      - intent: play_radiostream
+      - action: action_play_radiostream
