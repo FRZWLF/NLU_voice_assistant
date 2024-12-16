@@ -13,9 +13,9 @@ from webrtcvad import Vad
 from flask import Flask
 from flask_socketio import SocketIO
 from flask_cors import CORS
-from TTS import Voice
-from audioplayer import AudioPlayer
-import global_variable
+from backend.TTS import Voice
+from backend.audioplayer import AudioPlayer
+from backend import global_variable
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -52,7 +52,7 @@ class VoiceAssistant:
 
         # Initialisiere Rasa-Agent für NLP
         logger.info("Lade Rasa-Agent...")
-        self.agent = Agent.load("models")
+        self.agent = Agent.load("backend/models")
 
 
 
@@ -146,12 +146,14 @@ def handle_disconnect():
 # Subprozess-Methoden für andere Komponenten
 def start_rasa_server():
     logger.info("Starte Rasa-Server...")
-    subprocess.run(["rasa", "run", "--enable-api", "--cors", "*"], shell=True)
+    rasa_path = "C:/Users/ricor/IdeaProjects/NLU_voice_assistant/backend"
+    subprocess.run(["rasa", "run", "--enable-api", "--cors", "*"], shell=True, cwd=rasa_path)
 
 
 def start_rasa_actions():
     logger.info("Starte Rasa-Actions-Server...")
-    subprocess.run(["rasa", "run", "actions"], shell=True)
+    backend_path = "C:/Users/ricor/IdeaProjects/NLU_voice_assistant/backend"
+    subprocess.run(["rasa", "run", "actions"], shell=True, cwd=backend_path)
 
 
 def start_angular_frontend():
@@ -164,7 +166,7 @@ def start_angular_frontend():
 if __name__ == "__main__":
     multiprocessing.set_start_method('spawn')
     # Starte VoiceAssistant
-    global_variable['assistant'] = VoiceAssistant()
+    global_variable.assistant = VoiceAssistant()
     logger.debug(f"Assistant: {global_variable.assistant}")
 
     # Starte Rasa-Server

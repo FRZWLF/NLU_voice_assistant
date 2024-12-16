@@ -8,6 +8,7 @@ import soundfile as sf
 import multiprocessing
 import queue
 import numpy as np
+from backend import global_variable
 
 
 class AudioPlayer:
