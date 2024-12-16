@@ -13,6 +13,7 @@ intents:
   - ask_location
   - ask_wiki
   - ask_weather
+  - play_radiostream
 
 slots:
   wiki_query:
@@ -50,6 +51,7 @@ actions:
   - action_tell_wiki
   - action_tell_more_wiki
   - action_tell_weather
+  - action_play_radiostream
 
 session_config:
   session_expiration_time: 60

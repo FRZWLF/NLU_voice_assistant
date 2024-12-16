@@ -141,7 +141,12 @@ nlu:
     - sag mir das aktuelle wetter
     - sag mir das aktuelle wetter in
 
-#- intent: ask_musicstream
-#  examples: |
-#    - spiel radio
-#    - spiele radiosender
+- intent: play_radiostream
+  examples: |
+    - spiel radio 
+    - spiele radiosender 
+    - schalte den radiosender energy ein
+    - schalte radio top 40 an
+    - wähle den radiosender 
+    - wähle den radio sender 
+    - spiele radio sunshine live ab

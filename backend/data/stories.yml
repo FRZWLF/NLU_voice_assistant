@@ -66,3 +66,9 @@ stories:
   steps:
     - intent: ask_weather
     - action: action_tell_weather
+
+
+- story: Play a radiostream
+  steps:
+    - intent: play_radiostream
+    - action: action_play_radiostream
