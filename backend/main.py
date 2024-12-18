@@ -1,27 +1,18 @@
 import multiprocessing
-import os
 import subprocess
+import threading
 import numpy as np
 import pvporcupine
 import pyaudio
 import requests
-import whisper
-from rasa.core.agent import Agent
-from loguru import logger
 import sounddevice as sd
+import whisper
+from loguru import logger
+from rasa.core.agent import Agent
 from webrtcvad import Vad
-from flask import Flask
-from flask_socketio import SocketIO
-from flask_cors import CORS
-from backend.TTS import Voice
-from backend.audioplayer import AudioPlayer
-from backend import global_variable
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
-CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
-
+from TTS import Voice
+from audioplayer import AudioPlayer
 
 
 class VoiceAssistant:
@@ -48,11 +39,11 @@ class VoiceAssistant:
         self.audio_stream = self.setup_audio()
 
         self.audio_player = AudioPlayer()
-        self.audio_player.set_volume(1.0)
+        #self.audio_player.set_volume(1.0)
 
         # Initialisiere Rasa-Agent für NLP
         logger.info("Lade Rasa-Agent...")
-        self.agent = Agent.load("backend/models")
+        self.agent = Agent.load("models")
 
 
 
@@ -116,7 +107,7 @@ class VoiceAssistant:
         socketio.emit("wake_word_detected", {"status": "processing"}, namespace="/")
 
         # Speech-to-Text mit Whisper
-        transcription = self.stt_model.transcribe(audio_data)["text"]
+        transcription = self.stt_model.transcribe(audio_data, language="de")["text"]
         logger.info(f"Transkription: {transcription}")
         # Transkription an Rasa senden
         response = requests.post(
@@ -128,19 +119,6 @@ class VoiceAssistant:
             logger.info(f"Antwort: {answer}")
             socketio.emit("wake_word_detected", {"status": "ready"}, namespace="/")
             self.voice.say(answer)
-
-
-@app.route("/")
-def index():
-    return "Voice Assistant läuft!"
-
-@socketio.on('connect')
-def handle_connect():
-    logger.info("Client verbunden.")
-
-@socketio.on('disconnect')
-def handle_disconnect():
-    logger.info("Client getrennt.")
 
 
 # Subprozess-Methoden für andere Komponenten
@@ -165,9 +143,16 @@ def start_angular_frontend():
 
 if __name__ == "__main__":
     multiprocessing.set_start_method('spawn')
-    # Starte VoiceAssistant
-    global_variable.assistant = VoiceAssistant()
-    logger.debug(f"Assistant: {global_variable.assistant}")
+
+    # VoiceAssistant-Instanz erstellen und an app übergeben
+    assistant = VoiceAssistant()
+
+    from app import socketio, app, init_voice_assistant
+    init_voice_assistant(assistant)
+
+    # threading.Thread(target=start_rasa_server, daemon=True).start()
+    # threading.Thread(target=start_rasa_actions, daemon=True).start()
+    # threading.Thread(target=start_angular_frontend, daemon=True).start()
 
     # Starte Rasa-Server
     rasa_process = multiprocessing.Process(target=start_rasa_server)
@@ -180,7 +165,16 @@ if __name__ == "__main__":
 
     rasa_process.start(); actions_process.start(); frontend_process.start()
 
-    socketio.start_background_task(global_variable.assistant.listen_for_wake_word)
+    # # Wake-Word-Listener starten
+    # threading.Thread(target=assistant.listen_for_wake_word, daemon=True).start()
+    # # Flask-SocketIO in einem eigenen Thread starten
+    # flask_thread = threading.Thread(
+    #     target=socketio.run,
+    #     args=(app,),
+    #     kwargs={"host": "0.0.0.0", "port": 5000, "debug": True, "use_reloader": False},
+    # )
+    # flask_thread.start()
+    socketio.start_background_task(assistant.listen_for_wake_word)
     # Flask-SocketIO starten
     socketio.run(app, host="0.0.0.0", port=5000, debug=True, use_reloader=False)
     logger.info("VoiceAssistant gestartet.")
@@ -188,3 +182,8 @@ if __name__ == "__main__":
     rasa_process.join()
     actions_process.join()
     frontend_process.join()
+
+    # try:
+    #     flask_thread.join()
+    # except KeyboardInterrupt:
+    #     logger.info("Anwendung wird beendet...")

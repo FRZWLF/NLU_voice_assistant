@@ -9,21 +9,9 @@ export class SocketService {
   constructor(private socket: Socket) {
     console.log('Socket.IO Client wird gestartet...');
 
-    this.socket.ioSocket.on('connect', () => {
-      console.log('✅ Socket.IO Verbindung erfolgreich hergestellt!');
-    });
-
-    this.socket.ioSocket.on('connect_error', (error: any) => {
-      console.error('❌ Socket.IO Verbindungsfehler:', error);
-    });
-
-    this.socket.ioSocket.on('disconnect', () => {
-      console.warn('❗ Socket.IO Verbindung getrennt!');
-    });
-
-    this.socket.ioSocket.on('reconnect_attempt', () => {
-      console.log('🔄 Versuche, die Socket.IO Verbindung wiederherzustellen...');
-    });
+    console.log('Socket.IO Verbindung wird gestartet...');
+    this.socket.on('connect', () => console.log('✅ Verbindung hergestellt'));
+    this.socket.on('disconnect', () => console.warn('❗ Verbindung getrennt'));
   }
 
   // Lausche auf ein bestimmtes Event
@@ -36,5 +24,9 @@ export class SocketService {
   sendMessage(event: string, message: any) {
     console.log(`Sende Nachricht: Event - ${event}, Message - ${message}`);
     this.socket.emit(event, message);
+  }
+
+  listenForStreamStatus(): Observable<any> {
+    return this.socket.fromEvent('stream_status');
   }
 }

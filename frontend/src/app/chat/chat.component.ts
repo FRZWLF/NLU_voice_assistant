@@ -11,6 +11,7 @@ import { SocketService } from '../socket.service';
 })
 export class ChatComponent implements OnInit {
   userMessage: string = '';
+  streamStatus: any = null;
   messages: { sender: string; text: string }[] = [];
   status: string = 'ready'
 
@@ -44,6 +45,12 @@ export class ChatComponent implements OnInit {
     this.socketService.onMessage<{ sender: string; text: string }>('chat_response').subscribe((message) => {
       console.log('Bot-Nachricht empfangen:', message);
       this.messages.push({ sender: message.sender, text: message.text });
+    });
+
+    // Lausche auf Stream-Status-Änderungen
+    this.socketService.listenForStreamStatus().subscribe((data) => {
+      console.log('Stream-Status erhalten:', data);
+      this.streamStatus = data;
     });
   }
 }

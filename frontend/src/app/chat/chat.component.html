@@ -16,4 +16,13 @@
 
   <!-- Statuskreis -->
   <div class="status-circle" [ngClass]="status"></div>
+
+
+  <div *ngIf="streamStatus" class="stream-status">
+    <p><strong>Status:</strong> {{ streamStatus.status }}</p>
+    <p *ngIf="streamStatus.url"><strong>URL:</strong> {{ streamStatus.url }}</p>
+  </div>
+  <div *ngIf="!streamStatus">
+    <p>Warte auf Stream-Status...</p>
+  </div>
 </main>

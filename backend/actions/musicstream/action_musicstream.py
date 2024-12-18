@@ -1,7 +1,7 @@
+import requests
 from fuzzywuzzy import fuzz
 from loguru import logger
 from rasa_sdk import Action
-import global_variable
 
 
 class ActionPlayRadiostream(Action):
@@ -39,10 +39,15 @@ class ActionPlayRadiostream(Action):
         else:
             logger.debug("Starte Streaming von '{}' mit URL '{}'.".format(station, station_stream))
 
-        global_variable.assistant.audio_player.play_stream(station_stream)
+        response = requests.post("http://127.0.0.1:5000/play_stream", json={"url": station_stream})
+
+        if response.ok:
+            dispatcher.utter_message(text=f"Ich spiele {station} jetzt ab.")
+        else:
+            dispatcher.utter_message(text="Es gab ein Problem beim Abspielen des Streams.")
 
         # Der Assistent muss nicht sprechen, wenn ein Radiostream gespielt wird
-        return ""
+        return []
 
 def clean_station_name(extracted_text: str):
     keywords = ["spiele", "radio", "radiosender", "sender", "den", "ein", "an", "schalte", "wähle", "ab"]

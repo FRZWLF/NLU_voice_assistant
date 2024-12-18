@@ -8,7 +8,6 @@ import soundfile as sf
 import multiprocessing
 import queue
 import numpy as np
-from backend import global_variable
 
 
 class AudioPlayer:
@@ -28,7 +27,7 @@ class AudioPlayer:
     def play_stream(self, source):
         # Setze Lautstärke vor dem Starten des Streams auf die Standardlautstärke
         #logger.debug("Setze Lautstärke vor Streamstart auf: {}", global_variables.voice_assistant.volume)
-        self.set_volume(global_variable.assistant.volume)
+        self.set_volume(1.0)
         if self._process:
             self.stop()
         self._process = multiprocessing.Process(target=self._play_stream, args=(source, ))
