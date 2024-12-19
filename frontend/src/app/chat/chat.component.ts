@@ -13,7 +13,9 @@ export class ChatComponent implements OnInit {
   userMessage: string = '';
   streamStatus: any = null;
   messages: { sender: string; text: string }[] = [];
-  status: string = 'ready'
+  status: string = 'ready';
+  musicstate: string = "stop";
+  lastPlayedUrl: string | undefined;
 
   constructor(private chatService: ChatService, private socketService: SocketService) {}
 
@@ -29,6 +31,17 @@ export class ChatComponent implements OnInit {
       });
       this.userMessage = '';
     }
+  }
+
+  stopMusic() {
+    // Senden der Nachricht über den Socket
+    this.musicstate = "stop"
+    this.socketService.stateMusic('music_state', this.musicstate, this.lastPlayedUrl);
+  }
+  playMusic() {
+    // Senden der Nachricht über den Socket
+    this.musicstate = "play"
+    this.socketService.stateMusic('music_state', this.musicstate, this.lastPlayedUrl);
   }
 
   ngOnInit() {
@@ -51,6 +64,9 @@ export class ChatComponent implements OnInit {
     this.socketService.listenForStreamStatus().subscribe((data) => {
       console.log('Stream-Status erhalten:', data);
       this.streamStatus = data;
+      if (data.status === "playing" && data.url) {
+        this.lastPlayedUrl = data.url; // Speichere die URL aus dem Backend
+      }
     });
   }
 }

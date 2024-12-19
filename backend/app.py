@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO
 from flask_cors import CORS
+from loguru import logger
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -13,30 +14,53 @@ voice_assistant = None
 def init_voice_assistant(iassistant):
     global voice_assistant
     voice_assistant = iassistant
+    logger.debug(f"VoiceAssistant erfolgreich initialisiert: {voice_assistant}")
 
-@app.route("/play_stream", methods=["POST"])
-def play_stream():
+@socketio.on("music_state")
+def handle_music_state(data):
+    """
+    Verarbeitet die Musikzustände (play/stop).
+    """
+    logger.debug(f"Empfangene Daten im music_state-Handler: {data} ({type(data)})")
     if not voice_assistant:
-        return jsonify({"status": "error", "message": "VoiceAssistant nicht initialisiert"}), 500
-
-    data = request.get_json()
-    stream_url = data.get("url")
-
-    if not stream_url:
-        return jsonify({"status": "error", "message": "No stream URL provided"}), 400
+        logger.error("VoiceAssistant ist None. Initialisierung fehlgeschlagen.")
+        return {"status": "error", "message": "VoiceAssistant nicht initialisiert"}
 
     try:
-        voice_assistant.audio_player.play_stream(stream_url)
-        socketio.emit("stream_status", {"status": "playing", "url": stream_url}, namespace="/")
-        return jsonify({"status": "success", "message": f"Playing stream {stream_url}"}), 200
+        state = data.get("state")
+        url = data.get("url")  # Optional: für den Play-Status
+        logger.debug(f"Verarbeiteter State: {state}, URL: {url}")
+
+        if state == "play":
+            if not url:
+                return {"status": "error", "message": "No stream URL provided"}
+            # Stream starten
+            voice_assistant.audio_player.play_stream(url)
+            socketio.emit("stream_status", {"status": "playing", "url": url}, namespace="/")
+            return {"status": "success", "message": f"Playing stream {url}"}
+
+        elif state == "stop":
+            # Stream stoppen
+            logger.debug("Stream stoppen.")
+            voice_assistant.audio_player.stop()
+            socketio.emit("stream_status", {"status": "stopped"}, namespace="/")
+            logger.debug("Stream gestoppt.")
+            return {"status": "success", "message": "Stream gestoppt"}
+
+        else:
+            return {"status": "error", "message": f"Unbekannter Zustand: {state}"}
+
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        logger.error(f"Fehlgeschlagen: {e}")
+        return {"status": "error", "message": str(e)}
 
 
 # Socket.IO Events
 @socketio.on('connect')
 def handle_connect():
     print("Client verbunden.")
+    if voice_assistant:
+        socketio.emit("assistant_ready", {"status": "ready"}, namespace="/")
 
 @socketio.on('disconnect')
 def handle_disconnect():

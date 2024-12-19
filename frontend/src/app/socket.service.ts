@@ -26,6 +26,12 @@ export class SocketService {
     this.socket.emit(event, message);
   }
 
+  // Sende eine Nachricht an den Server
+  stateMusic(event: string, state: string, url?: string) {
+    console.log(`Sende Nachricht: Event - ${event}, State - ${state}, URL - ${url}`);
+    this.socket.emit(event, { state, url });
+  }
+
   listenForStreamStatus(): Observable<any> {
     return this.socket.fromEvent('stream_status');
   }

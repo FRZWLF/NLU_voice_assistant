@@ -128,6 +128,7 @@ class AudioPlayer:
             self._producer_running = False
 
     def stop(self):
+        logger.debug("Stop() wurde aufgerufen.")
         if self._process:
             logger.debug("Stoppe derzeitige Wiedergabe.")
             self._producer_running = False

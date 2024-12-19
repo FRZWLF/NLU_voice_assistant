@@ -21,6 +21,8 @@
   <div *ngIf="streamStatus" class="stream-status">
     <p><strong>Status:</strong> {{ streamStatus.status }}</p>
     <p *ngIf="streamStatus.url"><strong>URL:</strong> {{ streamStatus.url }}</p>
+    <div (click)="stopMusic()">Stop</div>
+    <div (click)="playMusic()">Play</div>
   </div>
   <div *ngIf="!streamStatus">
     <p>Warte auf Stream-Status...</p>
