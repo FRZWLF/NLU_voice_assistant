@@ -3,3 +3,5 @@ from actions.wiki.action_wiki import ActionTellWiki
 from actions.location.action_location import ActionTellLocation
 from actions.gettime.action_gettime import ActionTellTime
 from actions.musicstream.action_musicstream import ActionPlayRadiostream
+from actions.volume.action_volume import ActionGetVolume
+from actions.volume.action_volume import ActionMaxVolume

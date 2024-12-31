@@ -72,3 +72,15 @@ stories:
   steps:
     - intent: play_radiostream
     - action: action_play_radiostream
+
+
+- story: Get the current volume
+  steps:
+    - intent: get_volume
+    - action: action_get_volume
+
+
+- story: Set maximum volume
+  steps:
+    - intent: max_volume
+    - action: action_max_volume

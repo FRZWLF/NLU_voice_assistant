@@ -14,6 +14,8 @@ intents:
   - ask_wiki
   - ask_weather
   - play_radiostream
+  - get_volume
+  - max_volume
 
 slots:
   wiki_query:
@@ -52,6 +54,8 @@ actions:
   - action_tell_more_wiki
   - action_tell_weather
   - action_play_radiostream
+  - action_get_volume
+  - action_max_volume
 
 session_config:
   session_expiration_time: 60

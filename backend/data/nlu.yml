@@ -150,3 +150,18 @@ nlu:
     - wähle den radiosender 
     - wähle den radio sender 
     - spiele radio sunshine live ab
+
+- intent: get_volume
+  examples: |
+    - wie laut ist es
+    - lautstärke
+    - sage mir die lautstärke
+    - sag mir wie laut es ist
+    - wie laut ist es gerade
+    - wie ist die lautstärke
+
+- intent: max_volume
+  examples: |
+    - maximale lautstärke
+    - volle lautstärke
+    - setze die lautstärke auf maximum

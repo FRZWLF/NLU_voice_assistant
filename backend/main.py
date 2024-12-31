@@ -1,12 +1,14 @@
 import multiprocessing
 import subprocess
-import threading
+import sys
+
 import numpy as np
 import pvporcupine
 import pyaudio
 import requests
 import sounddevice as sd
 import whisper
+import yaml
 from loguru import logger
 from rasa.core.agent import Agent
 from webrtcvad import Vad
@@ -14,10 +16,26 @@ from webrtcvad import Vad
 from TTS import Voice
 from audioplayer import AudioPlayer
 
+CONFIG_FILE = "config_ai_assistant.yml"
+
 
 class VoiceAssistant:
     def __init__(self):
         logger.info("Initialisiere VoiceAssistant...")
+
+        global CONFIG_FILE
+        with open(CONFIG_FILE,'r',encoding="utf-8") as ymlfile:
+            self.cfg = yaml.load(ymlfile,Loader=yaml.FullLoader)
+        if self.cfg:
+            logger.debug("Konfiguration erfolgreich gelesen.")
+        else:
+            logger.error("Konfiguration konnte nicht gelesen werden.")
+            sys.exit(1)
+
+        language = self.cfg['assistant']['language']
+        if not language:
+            language = "de"
+        logger.info(f"Verwende Sprache {language}")
 
         # Initialisiere Whisper (Speech-to-Text)
         logger.info("Lade Whisper-Modell...")
@@ -39,7 +57,8 @@ class VoiceAssistant:
         self.audio_stream = self.setup_audio()
 
         self.audio_player = AudioPlayer()
-        #self.audio_player.set_volume(1.0)
+        self.volume = self.cfg["assistant"]["volume"]
+        self.silenced_volume = self.cfg["assistant"]["silenced_volume"]
 
         # Initialisiere Rasa-Agent für NLP
         logger.info("Lade Rasa-Agent...")
@@ -150,10 +169,6 @@ if __name__ == "__main__":
     from app import socketio, app, init_voice_assistant
     init_voice_assistant(assistant)
 
-    # threading.Thread(target=start_rasa_server, daemon=True).start()
-    # threading.Thread(target=start_rasa_actions, daemon=True).start()
-    # threading.Thread(target=start_angular_frontend, daemon=True).start()
-
     # Starte Rasa-Server
     rasa_process = multiprocessing.Process(target=start_rasa_server)
 
@@ -165,15 +180,6 @@ if __name__ == "__main__":
 
     rasa_process.start(); actions_process.start(); frontend_process.start()
 
-    # # Wake-Word-Listener starten
-    # threading.Thread(target=assistant.listen_for_wake_word, daemon=True).start()
-    # # Flask-SocketIO in einem eigenen Thread starten
-    # flask_thread = threading.Thread(
-    #     target=socketio.run,
-    #     args=(app,),
-    #     kwargs={"host": "0.0.0.0", "port": 5000, "debug": True, "use_reloader": False},
-    # )
-    # flask_thread.start()
     socketio.start_background_task(assistant.listen_for_wake_word)
     # Flask-SocketIO starten
     socketio.run(app, host="0.0.0.0", port=5000, debug=True, use_reloader=False)
@@ -182,8 +188,3 @@ if __name__ == "__main__":
     rasa_process.join()
     actions_process.join()
     frontend_process.join()
-
-    # try:
-    #     flask_thread.join()
-    # except KeyboardInterrupt:
-    #     logger.info("Anwendung wird beendet...")
