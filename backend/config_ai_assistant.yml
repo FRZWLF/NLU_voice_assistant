@@ -1,4 +1,4 @@
 assistant:
   language: de
-  volume: 0.8
   silenced_volume: 0.2
+  volume: 0.3

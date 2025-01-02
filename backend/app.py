@@ -36,6 +36,7 @@ def handle_music_state(data):
                 return {"status": "error", "message": "No stream URL provided"}
             # Stream starten
             voice_assistant.audio_player.play_stream(url)
+            logger.debug("Stream gestartet, sende 'stream_status'-Event.")
             socketio.emit("stream_status", {"status": "playing", "url": url}, namespace="/")
             return {"status": "success", "message": f"Playing stream {url}"}
 
@@ -44,7 +45,7 @@ def handle_music_state(data):
             logger.debug("Stream stoppen.")
             voice_assistant.audio_player.stop()
             socketio.emit("stream_status", {"status": "stopped"}, namespace="/")
-            logger.debug("Stream gestoppt.")
+            logger.debug("Stream gestoppt und 'stream_status'-Event gesendet.")
             return {"status": "success", "message": "Stream gestoppt"}
 
         else:
@@ -60,6 +61,12 @@ def set_volume(data):
     voice_assistant.voice.set_volume(data)
     voice_assistant.audio_player.set_volume(data)
     voice_assistant.volume = data
+
+@socketio.on('play_animalsound')
+def play_animalsound(data):
+    logger.debug(f"Empfangenes ogg-file: {data}")
+    voice_assistant.audio_player.play_file(data)
+
 
 
 # Socket.IO Events

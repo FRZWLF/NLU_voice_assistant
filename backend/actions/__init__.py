@@ -8,3 +8,4 @@ from actions.volume.action_volume import ActionMaxVolume
 from actions.volume.action_volume import ActionSetVolume
 from actions.volume.action_volume import ActionVolumeUp
 from actions.volume.action_volume import ActionVolumeDown
+from actions.animal.action_animal import ActionPlayAnimalSound

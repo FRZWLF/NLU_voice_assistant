@@ -1,4 +1,3 @@
-import requests
 from fuzzywuzzy import fuzz
 from loguru import logger
 from rasa_sdk import Action

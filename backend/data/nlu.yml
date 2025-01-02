@@ -203,3 +203,17 @@ nlu:
     - kannst du bitte leiser machen
     - ein bisschen leiser machen
     - mach leiser bitte
+
+- intent: play_animalsound
+  examples: |
+    - wie macht die [katze](animal)
+    - wie macht der [hund](animal)
+    - wie macht das [schwein](animal)
+    - wie macht die [Ente](animal)
+    - spiele den Klang einer [Gans](animal)
+    - spiele den Sound von einem [Schaf](animal)
+    - wie klingt das [Huhn](animal)
+    - welchen laut macht das [pferd](animal)
+    - spiele das Geräusch einer [Ziege](animal)
+    - kannst du das Geräusch vom [Ochse](animal) abspielen
+    - spiele den sound vom [Truthahn](animal)

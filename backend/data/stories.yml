@@ -104,3 +104,11 @@ stories:
   steps:
     - intent: volume_down
     - action: action_volume_down
+
+
+- story: Play a animal sound
+  steps:
+    - intent: play_animalsound
+      entities:
+        - animal: dog
+    - action: action_play_animalsound
