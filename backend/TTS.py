@@ -22,3 +22,6 @@ class Voice:
     def stop(self):
         self.queue.put("STOP")
         self.process.terminate()
+
+    def set_volume(self, volume=0.5):
+        self.volume = volume

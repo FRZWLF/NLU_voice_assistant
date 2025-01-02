@@ -16,6 +16,9 @@ intents:
   - play_radiostream
   - get_volume
   - max_volume
+  - set_volume
+  - volume_up
+  - volume_down
 
 slots:
   wiki_query:
@@ -23,6 +26,13 @@ slots:
     influence_conversation: false
     mappings:
       - type: custom
+
+  volume_change:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: volume_change
 
 responses:
   utter_greet:
@@ -56,6 +66,9 @@ actions:
   - action_play_radiostream
   - action_get_volume
   - action_max_volume
+  - action_set_volume
+  - action_volume_up
+  - action_volume_down
 
 session_config:
   session_expiration_time: 60

@@ -17,6 +17,7 @@ pipeline:
   - name: SpacyNLP  # Komponente zur Verarbeitung natürlicher Sprache
     model: "de_core_news_lg"
   - name: SpacyTokenizer  # Zerlegt den Text in Wörter
+    token_pattern: "[^\\s]+"
   - name: SpacyFeaturizer  # Extrahiert Merkmale aus den Wörtern
   - name: SpacyEntityExtractor
   - name: RegexFeaturizer  # Erfasst Muster wie Zahlen oder E-Mails

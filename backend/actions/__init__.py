@@ -5,3 +5,6 @@ from actions.gettime.action_gettime import ActionTellTime
 from actions.musicstream.action_musicstream import ActionPlayRadiostream
 from actions.volume.action_volume import ActionGetVolume
 from actions.volume.action_volume import ActionMaxVolume
+from actions.volume.action_volume import ActionSetVolume
+from actions.volume.action_volume import ActionVolumeUp
+from actions.volume.action_volume import ActionVolumeDown

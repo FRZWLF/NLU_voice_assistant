@@ -84,3 +84,23 @@ stories:
   steps:
     - intent: max_volume
     - action: action_max_volume
+
+
+- story: Set custom volume
+  steps:
+    - intent: set_volume
+      entities:
+        - volume_change: 5
+    - action: action_set_volume
+
+
+- story: Adjust volume up
+  steps:
+    - intent: volume_up
+    - action: action_volume_up
+
+
+- story: Adjust volume down
+  steps:
+    - intent: volume_down
+    - action: action_volume_down

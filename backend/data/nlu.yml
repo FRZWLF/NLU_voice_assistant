@@ -154,7 +154,6 @@ nlu:
 - intent: get_volume
   examples: |
     - wie laut ist es
-    - lautstärke
     - sage mir die lautstärke
     - sag mir wie laut es ist
     - wie laut ist es gerade
@@ -164,4 +163,43 @@ nlu:
   examples: |
     - maximale lautstärke
     - volle lautstärke
-    - setze die lautstärke auf maximum
+
+- intent: set_volume
+  examples: |
+    - lautstärke [zehn](volume_change)
+    - setze lautstärke auf [null](volume_change)
+    - setze lautstärke [7](volume_change)
+    - erhöhe die lautstärke auf [3](volume_change)
+    - reduziere die lautstärke auf [5](volume_change)
+    - mach die lautstärke auf [fünf](volume_change)
+    - stelle die lautstärke auf [null](volume_change)
+
+- intent: volume_up
+  examples: |
+    - mach lauter
+    - mach es lauter
+    - stell die Lautstärke höher
+    - mach ein bisschen lauter
+    - mach es deutlich lauter
+    - erhöhe die Lautstärke
+    - viel lauter bitte
+    - kannst du bitte lauter machen
+    - ein bisschen lauter bitte
+    - mach lauter bitte
+    - lauter machen
+    - mach es etwas lauter
+
+- intent: volume_down
+  examples: |
+    - mach leiser
+    - mach es leiser
+    - stell die Lautstärke runter
+    - reduziere die Lautstärke
+    - mach ein bisschen leiser
+    - mach es deutlich leiser
+    - viel leiser bitte
+    - mach es etwas leiser
+    - leiser machen
+    - kannst du bitte leiser machen
+    - ein bisschen leiser machen
+    - mach leiser bitte

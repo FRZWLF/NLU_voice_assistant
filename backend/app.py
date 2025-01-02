@@ -55,8 +55,8 @@ def handle_music_state(data):
         return {"status": "error", "message": str(e)}
 
 
-@socketio.on('set_max_volume')
-def set_max_volume(data):
+@socketio.on('set_volume')
+def set_volume(data):
     voice_assistant.voice.set_volume(data)
     voice_assistant.audio_player.set_volume(data)
     voice_assistant.volume = data
