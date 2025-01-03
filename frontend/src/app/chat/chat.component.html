@@ -1,21 +1,33 @@
 <main>
   <!-- Eingabefeld -->
-  <div (keydown.enter)="sendMessage()">
-    <input [(ngModel)]="userMessage" placeholder="Schreibe etwas..." />
-    <button (click)="sendMessage()">Senden</button>
+  <div class="input">
+    <div (keydown.enter)="sendMessage()">
+      <input [(ngModel)]="userMessage" placeholder="Schreibe etwas..." autofocus/>
+      <button (click)="sendMessage()">Senden</button>
+    </div>
+    <!-- Statuskreis -->
+    <div class="status-circle" [ngClass]="status"></div>
   </div>
 
-  <!-- Nachrichtenliste -->
-  <div>
-    <ul>
-      <li *ngFor="let message of messages">
-        <strong>{{ message.sender }}:</strong> {{ message.text }}
-      </li>
-    </ul>
+  <div class="content">
+    <!-- Nachrichtenliste -->
+    <div>
+      <ul>
+        <li *ngFor="let message of messages">
+          <strong>{{ message.sender }}:</strong> {{ message.text }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="smartdevices">
+      <h1>Smartdevices</h1>
+      <div class="device" *ngFor="let device of devices" (click)="connectDevice()">
+        <strong>{{device.name}}</strong><br>
+        <p>{{device.ip}}</p>
+      </div>
+    </div>
   </div>
 
-  <!-- Statuskreis -->
-  <div class="status-circle" [ngClass]="status"></div>
 
 
   <div *ngIf="streamStatus" class="stream-status">

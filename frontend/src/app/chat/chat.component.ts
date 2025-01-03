@@ -13,6 +13,7 @@ export class ChatComponent implements OnInit {
   userMessage: string = '';
   streamStatus: any = null;
   messages: { sender: string; text: string }[] = [];
+  devices: { name: string; ip: string}[] = [];
   status: string = 'ready';
   musicstate: string = "stop";
   lastPlayedUrl: string | undefined;
@@ -31,6 +32,11 @@ export class ChatComponent implements OnInit {
       });
       this.userMessage = '';
     }
+  }
+
+  connectDevice() {
+    //connect über Socket senden
+    this.socketService.connectDevice('connect', this.userMessage);
   }
 
   stopMusic() {

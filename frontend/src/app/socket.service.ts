@@ -26,6 +26,11 @@ export class SocketService {
     this.socket.emit(event, message);
   }
 
+  connectDevice(event: string, name: string) {
+    console.log(`Verbinde Gerät: Event - ${event}, Device - ${name}`);
+    this.socket.emit(event, name);
+  }
+
   // Sende eine Nachricht an den Server
   stateMusic(event: string, state: string, url?: string) {
     console.log(`Sende Nachricht: Event - ${event}, State - ${state}, URL - ${url}`);

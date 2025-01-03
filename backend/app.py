@@ -16,6 +16,7 @@ def init_voice_assistant(iassistant):
     voice_assistant = iassistant
     logger.debug(f"VoiceAssistant erfolgreich initialisiert: {voice_assistant}")
 
+saved_url = None  # Speicher für die URL
 @socketio.on("music_state")
 def handle_music_state(data):
     """
@@ -26,15 +27,23 @@ def handle_music_state(data):
         logger.error("VoiceAssistant ist None. Initialisierung fehlgeschlagen.")
         return {"status": "error", "message": "VoiceAssistant nicht initialisiert"}
 
+    global saved_url
     try:
         state = data.get("state")
-        url = data.get("url")  # Optional: für den Play-Status
+        url = data.get("url", "")  # Optional: für den Play-Status
         logger.debug(f"Verarbeiteter State: {state}, URL: {url}")
 
         if state == "play":
             if not url:
-                return {"status": "error", "message": "No stream URL provided"}
+                if not saved_url:  # Auch keine gespeicherte URL vorhanden
+                    logger.error("Keine URL verfügbar")
+                    return {"status": "error", "message": "No stream URL provided"}
+                url = saved_url  # Verwende die gespeicherte URL
+                logger.info(f"Verwende gespeicherte URL: {url}")
+
             # Stream starten
+            saved_url = url
+            logger.info(f"saved url: {saved_url}")
             voice_assistant.audio_player.play_stream(url)
             logger.debug("Stream gestartet, sende 'stream_status'-Event.")
             socketio.emit("stream_status", {"status": "playing", "url": url}, namespace="/")

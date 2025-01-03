@@ -217,3 +217,31 @@ nlu:
     - spiele das Geräusch einer [Ziege](animal)
     - kannst du das Geräusch vom [Ochse](animal) abspielen
     - spiele den sound vom [Truthahn](animal)
+
+- intent: play
+  examples: |
+    - abspielen
+    - spiele Radio weiter
+    - spiele weiter
+    - starte den Stream wieder
+    - starte stream
+    - spiele stream
+    - spiele Musik wieder
+    - Musik weiter abspielen
+    - spiele Musik
+    - beginne den stream
+
+- intent: stop
+  examples: |
+    - stop
+    - halt
+    - stopp
+    - aufhören
+    - sei leise
+    - stop den stream
+    - beende die Musik
+    - hör auf 
+    - beende den stream
+    - kurze pause
+    - kein radio mehr
+    - radio ende

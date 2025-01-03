@@ -112,3 +112,13 @@ stories:
       entities:
         - animal: dog
     - action: action_play_animalsound
+
+- story: Play stream
+  steps:
+    - intent: play
+    - action: action_play
+
+- story: Play stream
+  steps:
+    - intent: stop
+    - action: action_stop
