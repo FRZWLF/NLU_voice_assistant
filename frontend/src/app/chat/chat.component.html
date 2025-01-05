@@ -11,7 +11,7 @@
 
   <div class="content">
     <!-- Nachrichtenliste -->
-    <div>
+    <div class="chatbox">
       <ul>
         <li *ngFor="let message of messages">
           <strong>{{ message.sender }}:</strong> {{ message.text }}
@@ -20,10 +20,40 @@
     </div>
 
     <div class="smartdevices">
+      <button (click)="startScan()">Scan starten</button>
       <h1>Smartdevices</h1>
-      <div class="device" *ngFor="let device of devices" (click)="connectDevice()">
-        <strong>{{device.name}}</strong><br>
-        <p>{{device.ip}}</p>
+      <ul *ngIf="shellyDevices.length > 0">
+        <li class="device" *ngFor="let device of shellyDevices" (click)="connectToDevice(device.ssid)">
+          <strong>{{device.ssid}}</strong>
+        </li>
+      </ul>
+      <p *ngIf="shellyDevices.length === 0">Keine Geräte gefunden.</p>
+      <div *ngFor="let message of messages" class="feedback-section">
+        {{ message }}
+      </div>
+    </div>
+
+    <div class="wificontent">
+      <button (click)="scanWifi()">Nach verfügbaren WLAN-Netzwerken scannen</button>
+
+      <div *ngIf="wifilist.length > 0; else noWifiFound">
+        <h3>Verfügbare WLAN-Netzwerke</h3>
+        <ul>
+          <li class="wifi" *ngFor="let wifi of wifilist" (click)="selectedSSID = wifi.ssid">{{ wifi.ssid }}</li>
+        </ul>
+      </div>
+      <ng-template #noWifiFound>
+        <p>Keine WLAN-Netzwerke gefunden.</p>
+      </ng-template>
+
+      <div *ngIf="selectedSSID">
+        <h3>Verbinden mit {{ selectedSSID }}</h3>
+        <input type="password" [(ngModel)]="wifiPassword" placeholder="Passwort eingeben" />
+        <button (click)="connectWifi(selectedSSID, wifiPassword)">Verbinden</button>
+      </div>
+
+      <div *ngIf="connectionFeedback">
+        <p>{{ connectionFeedback }}</p>
       </div>
     </div>
   </div>

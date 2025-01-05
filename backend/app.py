@@ -1,7 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from loguru import logger
+from shelly.shelly_actions import discover_shelly_ap, connect_to_shelly_ap
+from wifi.wifi_connect import save_wifi
+from wifi.wifi_scan import scan_wifi
+from wifi.wifi_crypto import get_public_key
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -75,6 +79,36 @@ def set_volume(data):
 def play_animalsound(data):
     logger.debug(f"Empfangenes ogg-file: {data}")
     voice_assistant.audio_player.play_file(data)
+
+
+
+@app.route('/get-public-key', methods=['GET'])
+def handle_public_key():
+    return get_public_key()
+
+@socketio.on('scan_wifi')
+def handle_scan_wifi():
+    scan_wifi()
+
+@socketio.on('save_wifi_credentials')
+def save_wifi_credentials(data):
+    save_wifi(data)
+
+
+@socketio.on('shelly_ap_scan')
+def handle_shelly_ap_scan():
+    shelly_networks = discover_shelly_ap()
+    if shelly_networks:
+        socketio.emit('ap_scan_result', shelly_networks)
+    else:
+        logger.info("Keine Shelly-Netzwerke gefunden.")
+        socketio.emit('ap_scan_result', [])
+
+
+@socketio.on('connect_shelly_ap')
+def handle_connect_to_shelly_ap(data):
+    connect_to_shelly_ap(data)
+
 
 
 

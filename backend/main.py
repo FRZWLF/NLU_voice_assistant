@@ -181,6 +181,7 @@ if __name__ == "__main__":
     rasa_process.start(); actions_process.start(); frontend_process.start()
 
     socketio.start_background_task(assistant.listen_for_wake_word)
+
     # Flask-SocketIO starten
     socketio.run(app, host="0.0.0.0", port=5000, debug=True, use_reloader=False)
     logger.info("VoiceAssistant gestartet.")
