@@ -257,17 +257,17 @@ nlu:
     - Schalte [Wohnzimmer Licht](device_name) [an](device_state)
     - Mach das [Küchenlicht](device_name) [aus](device_state)
     - Bitte das [Schlafzimmerlicht](device_name) [einschalten](device_state)
-    - Kannst du das [Esszimmer Licht](device_name) [ausschalten](device_state)
+    - Kannst du das [Esszimmer Licht 3](device_name) [ausschalten](device_state)
     - Das [Badezimmer Licht](device_name) soll [aus](device_state) sein
     - Ich möchte das [Arbeitszimmer Licht](device_name) [einschalten](device_state)
     - Das [Gartenlicht](device_name) bitte [ausschalten](device_state)
     - [Wohnzimmer Licht](device_name) [an](device_state) machen
-    - Stelle das [Deckenlicht](device_name) auf [an](device_state)
+    - Stelle das [Deckenlicht 1](device_name) auf [an](device_state)
     - Bitte das [test](device_name) [aus](device_state) schalten
     - Mach das [Hauptlicht](device_name) [an](device_state)
     - Schalte das [Eingangslicht](device_name) [aus](device_state)
     - Könntest du das [Gartenlicht](device_name) [einschalten](device_state)
-    - Lass das [Wohnzimmerlicht](device_name) [aus](device_state) sein
+    - Lass das [Wohnzimmerlicht 2](device_name) [aus](device_state) sein
     - Das [Schlafzimmer Licht](device_name) soll [an](device_state) sein
     - Licht [aus](device_state) im [Esszimmer](device_name)
     - Licht [an](device_state) im [Büro](device_name)

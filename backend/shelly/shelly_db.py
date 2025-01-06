@@ -24,14 +24,15 @@ def save_connected_device(shelly_data,name=None,device_type=None,ip=None):
     """
     try:
         device_id = shelly_data["id"]
+        devices_table = db.table('devices')
         Device = Query()
 
         # Prüfe, ob das Gerät schon in der Datenbank existiert
-        existing_device = CONNECTED_DEVICES_DB.search(Device.id == device_id)
+        existing_device = devices_table.search(Device.id == device_id)
 
         if existing_device:
             # Aktualisiere das bestehende Gerät
-            CONNECTED_DEVICES_DB.update({
+            devices_table.update({
                 "name": name if name else existing_device[0].get("name"),
                 "type": device_type if device_type else existing_device[0].get("type"),
                 "ip": ip if ip else existing_device[0].get("ip"),
@@ -40,7 +41,7 @@ def save_connected_device(shelly_data,name=None,device_type=None,ip=None):
             logger.info(f"Gerät aktualisiert: {device_id}")
         else:
             # Füge das Gerät als neues Element hinzu
-            CONNECTED_DEVICES_DB.insert({
+            devices_table.insert({
                 "id": device_id,
                 "name": name,
                 "type": device_type,
