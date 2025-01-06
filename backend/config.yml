@@ -19,10 +19,10 @@ pipeline:
   - name: SpacyTokenizer  # Zerlegt den Text in Wörter
     token_pattern: "[^\\s]+"
   - name: SpacyFeaturizer  # Extrahiert Merkmale aus den Wörtern
-  - name: SpacyEntityExtractor
+  - name: CRFEntityExtractor
   - name: RegexFeaturizer  # Erfasst Muster wie Zahlen oder E-Mails
   - name: DIETClassifier  # Hauptmodell zur Intent- und Entitäten-Erkennung
-    epochs: 200
+    epochs: 600
     constrain_similarities: true
     entity_recognition: true
   - name: EntitySynonymMapper  # Zuordnung von Synonymen zu Entitäten
@@ -57,5 +57,5 @@ policies:
   - name: MemoizationPolicy
   - name: TEDPolicy
     max_history: 5
-    epochs: 100
+    epochs: 250
     constrain_similarities: true

@@ -1,48 +1,51 @@
-import os
+import requests
+from loguru import logger
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
+from shelly.shelly_db import load_connected_devices
 
-DB_PATH = os.path.join('data', 'smartdevices_db.json')
-db = SmartHomeDB(DB_PATH)
-shelly_handler = ShellyHandler()
 
-class ActionAddSmartDevice(Action):
+class ActionControlShelly(Action):
     def name(self):
-        return "action_add_smart_device"
-
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain):
-        # Gerätesuche starten
-        devices = shelly_handler.discover_shelly_device()
-        if not devices:
-            dispatcher.utter_message(text="Es wurden keine Smart-Geräte gefunden.")
-            return []
-
-        # Geräte in der Datenbank speichern
-        for device in devices:
-            db.add_device(device)
-        dispatcher.utter_message(text=f"{len(devices)} Geräte wurden hinzugefügt.")
-        return []
-
-class ActionControlSmartDevice(Action):
-    def name(self):
-        return "action_control_smart_device"
+        return "action_control_shelly"
 
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain):
         device_name = tracker.get_slot("device_name")
         state = tracker.get_slot("device_state")
+        devices = load_connected_devices()
 
-        # Übersetze den Gerätezustand in "on"/"off"
-        state = "on" if state in ["an", "ein"] else "off"
-        device = db.get_device_by_name(device_name)
+        if not devices:
+            logger.error("Keine Geräte in der Datenbank gefunden.")
+            return dispatcher.utter_message(text=f"Keine Geräte in der Datenbank gefunden.")
+
+        # Gerät suchen
+        device = next((d for d in devices if d.get("name") == device_name), None)
 
         if not device:
-            dispatcher.utter_message(text=f"Das Gerät '{device_name}' wurde nicht gefunden.")
-            return []
+            logger.error(f"Das Gerät '{device_name}' wurde nicht gefunden.")
+            return dispatcher.utter_message(text=f"Das Gerät '{device_name}' wurde nicht gefunden.")
 
-        # Shelly-Gerät steuern
-        success = shelly_handler.control_device(device, state)
-        if success:
-            dispatcher.utter_message(text=f"Das Gerät '{device_name}' wurde {state} geschaltet.")
+        logger.info("Device gefunden.")
+        s = None
+        if state in ["ein", "an", "einschalten", "anschalten"]:
+            s = "on"
+        elif state in ["aus", "ausschalten"]:
+            s = "off"
         else:
-            dispatcher.utter_message(text=f"Das Gerät '{device_name}' konnte nicht gesteuert werden.")
-        return []
+            logger.warning("Unbekannter Status: {}", state)
+            return dispatcher.utter_message(text=f"Der Zustand {state} ist für den Schalter ungültig.")
+
+        # Setze einen Get-Request ab, der das Gerät ein- oder ausschaltet
+        PARAMS = {'turn': s}
+        url = f"http://{device['ip']}/relay/0"
+
+        try:
+            logger.info("Device gefunden.")
+            r = requests.get(url = url, params = PARAMS)
+            r.raise_for_status()
+            data = r.json()
+            logger.debug("API-Antwort: {}", data)
+            return ""
+        except Exception as e:
+            logger.error("Fehler beim Senden der Anfrage: {}", e)
+            return dispatcher.utter_message(text=f"Anfrage an {device_name} fehlgeschlagen.")

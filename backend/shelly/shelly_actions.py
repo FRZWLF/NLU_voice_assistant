@@ -60,7 +60,7 @@ def connect_to_shelly_ap(data):
 
     # Überprüfen, ob das Gerät bereits verbunden ist
     connected_devices = load_connected_devices()
-    if any(ssid.lower() in device.get("id", "").lower() for device in connected_devices.values()):
+    if any(ssid.lower() in device.get("id", "").lower() for device in connected_devices):
         logger.info(f"Gerät '{ssid}' ist bereits verbunden.")
         emit('ap_connection_result', {"status": "error", "message": "Das Gerät ist bereits verbunden."})
         return
@@ -88,7 +88,7 @@ def connect_to_shelly_ap(data):
                 # Neue IP im Heimnetzwerk finden
                 shelly_device = find_shelly_ip_in_lan()
                 if shelly_device:
-                    save_connected_device(shelly_device["info"])  # Gerät speichern
+                    save_connected_device(shelly_data=shelly_device["info"],ip=shelly_device['ip'])  # Gerät speichern
                     logger.info(f"Shelly erfolgreich integriert. Neue IP: {shelly_device['ip']}")
 
                     # Rückverbindung zum Heim-WLAN

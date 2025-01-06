@@ -22,10 +22,14 @@ intents:
   - play_animalsound
   - play
   - stop
+  - control_light
 
 entities:
   - volume_change
   - animal
+  - device_name
+  - device_state
+  - location
 
 slots:
   wiki_query:
@@ -47,6 +51,28 @@ slots:
     mappings:
       - type: from_entity
         entity: animal
+
+  device_name:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: device_name
+
+  device_state:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: device_state
+
+  location:
+    type: text
+    influence_conversation: false
+    initial_value: ""
+    mappings:
+      - type: from_entity
+        entity: location
 
 responses:
   utter_greet:
@@ -86,6 +112,7 @@ actions:
   - action_play_animalsound
   - action_play
   - action_stop
+  - action_control_shelly
 
 session_config:
   session_expiration_time: 60

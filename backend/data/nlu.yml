@@ -132,14 +132,20 @@ nlu:
 
 - intent: ask_weather
   examples: |
-    - wie ist das wetter in 
+    - wie ist das wetter in [Zeulenroda](location).
+    - wie ist das wetter in [Toronto](location) gerade.
+    - wie ist das wetter in [Saint-Tropez](location) aktuell.
     - wie ist das wetter
-    - wetter in
+    - wetter in [Niederpöllnitz](location)!
     - wetter
-    - aktuelles wetter
-    - aktuelles wetter in
-    - sag mir das aktuelle wetter
-    - sag mir das aktuelle wetter in
+    - aktuelles wetter ?
+    - aktuelles wetter in [Bad Köstritz](location)
+    - sag mir das aktuelle wetter?
+    - sag mir das aktuelle wetter in [New York](location)
+    - wie ist das Wetter aktuell
+    - kannst du mir sagen, wie das aktuelle Wetter ist
+    - kannst du mir das aktuelle Wetter sagen?
+    - wie ist das Wetter aktuell in [Los Angeles](location).
 
 - intent: play_radiostream
   examples: |
@@ -245,3 +251,23 @@ nlu:
     - kurze pause
     - kein radio mehr
     - radio ende
+
+- intent: control_light
+  examples: |
+    - Schalte [Wohnzimmer Licht](device_name) [an](device_state)
+    - Mach das [Küchenlicht](device_name) [aus](device_state)
+    - Bitte das [Schlafzimmerlicht](device_name) [einschalten](device_state)
+    - Kannst du das [Esszimmer Licht](device_name) [ausschalten](device_state)
+    - Das [Badezimmer Licht](device_name) soll [aus](device_state) sein
+    - Ich möchte das [Arbeitszimmer Licht](device_name) [einschalten](device_state)
+    - Das [Gartenlicht](device_name) bitte [ausschalten](device_state)
+    - [Wohnzimmer Licht](device_name) [an](device_state) machen
+    - Stelle das [Deckenlicht](device_name) auf [an](device_state)
+    - Bitte das [test](device_name) [aus](device_state) schalten
+    - Mach das [Hauptlicht](device_name) [an](device_state)
+    - Schalte das [Eingangslicht](device_name) [aus](device_state)
+    - Könntest du das [Gartenlicht](device_name) [einschalten](device_state)
+    - Lass das [Wohnzimmerlicht](device_name) [aus](device_state) sein
+    - Das [Schlafzimmer Licht](device_name) soll [an](device_state) sein
+    - Licht [aus](device_state) im [Esszimmer](device_name)
+    - Licht [an](device_state) im [Büro](device_name)
