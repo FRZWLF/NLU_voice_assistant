@@ -144,13 +144,13 @@ export class SocketService {
     return this.socket.fromEvent('stream_status');
   }
 
-  scanForShellyAP(): Observable<{ ssid: string }[]> {
+  scanForShellyAP(): Observable<{ shelly_networks: { ssid: string }[], connected_devices: { ssid: string, name: string }[] }> {
     this.socket.emit('shelly_ap_scan');
-    return this.socket.fromEvent<{ ssid: string }[]>('ap_scan_result');
+    return this.socket.fromEvent<{ shelly_networks: { ssid: string }[], connected_devices: { ssid: string, name: string }[] }>('ap_scan_result');
   }
 
-  connectToShellyAP(ssid: string): Observable<{ status: string; message: string }> {
-    this.socket.emit('connect_shelly_ap', { ssid });
+  connectToShellyAP(ssid: string, name: string): Observable<{ status: string; message: string }> {
+    this.socket.emit('connect_shelly_ap', { ssid, name });
     return this.socket.fromEvent<{ status: string; message: string }>('ap_connection_result');
   }
 

@@ -21,13 +21,28 @@
 
     <div class="smartdevices">
       <button (click)="startScan()">Scan starten</button>
-      <h1>Smartdevices</h1>
+      <h1>Verfügbare Smartdevices</h1>
       <ul *ngIf="shellyDevices.length > 0">
-        <li class="device" *ngFor="let device of shellyDevices" (click)="connectToDevice(device.ssid)">
+        <li class="device" *ngFor="let device of shellyDevices" (click)="selectedDevice = device.ssid">
           <strong>{{device.ssid}}</strong>
         </li>
       </ul>
       <p *ngIf="shellyDevices.length === 0">Keine Geräte gefunden.</p>
+      <div *ngIf="selectedDevice">
+        <h3>Verbinden mit {{ selectedDevice }}</h3>
+        <input type="text" [(ngModel)]="deviceName" placeholder="Gerätenamen eingeben" />
+        <button (click)="connectToDevice(selectedDevice, deviceName)">Verbinden</button>
+      </div>
+
+      <h1>Verbundene Smartdevices</h1>
+      <ul *ngIf="connectedDevices.length > 0">
+        <li class="device" *ngFor="let device of connectedDevices">
+          <strong>{{ device.name }}</strong>
+          <p>{{ device.ssid }}</p>
+        </li>
+      </ul>
+      <p *ngIf="shellyDevices.length === 0">Keine Geräte gefunden.</p>
+
       <div *ngFor="let message of feedbackMessages" class="feedback-section">
         {{ message }}
       </div>

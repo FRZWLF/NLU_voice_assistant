@@ -22,7 +22,9 @@ export class ChatComponent implements OnInit {
   lastPlayedUrl: string | undefined;
   publicKeyPem: string = '';
   shellyDevices: { ssid: string }[] = [];
+  connectedDevices: { name: string, ssid: string }[] = []
   selectedDevice: string = '';
+  deviceName: string = '';
   feedbackMessages: string[] = [];
 
   constructor(private chatService: ChatService, private socketService: SocketService) {}
@@ -47,22 +49,27 @@ export class ChatComponent implements OnInit {
   }
 
   startScan() {
-    this.socketService.scanForShellyAP().subscribe((devices) => {
-      if (devices.length > 0) {
-        this.shellyDevices = devices;
+    this.socketService.scanForShellyAP().subscribe((data) => {
+      const { shelly_networks, connected_devices } = data;
+      if (shelly_networks.length > 0 || connected_devices.length > 0) {
+        this.shellyDevices = shelly_networks;
+        this.connectedDevices = connected_devices;
         console.log('Gefundene Shelly-Geräte:', this.shellyDevices);
+        console.log('Bereits verbundene Geräte:', this.connectedDevices);
       } else {
         console.warn('Keine Shelly-Geräte gefunden.');
         this.shellyDevices = [];
+        this.connectedDevices = [];
       }
     });
   }
 
-  connectToDevice(ssid: string) {
+  connectToDevice(ssid: string, name: string) {
     this.selectedDevice = ssid;
+    this.deviceName = name
     console.log(`Verbinde mit Access Point: ${ssid}`);
 
-    this.socketService.connectToShellyAP(ssid).subscribe((response) => {
+    this.socketService.connectToShellyAP(ssid, name).subscribe((response) => {
       if (response.status === 'success') {
         console.log('Shelly erfolgreich konfiguriert!');
       } else {

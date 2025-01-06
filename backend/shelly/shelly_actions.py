@@ -27,19 +27,26 @@ def discover_shelly_ap():
 
         # Suche nach SSIDs, die "Shelly" enthalten
         shelly_networks = []
+        connected_devices = []
         ssid_pattern = re.compile(r"SSID \d+ : (.+)")
         # Lade verbundene Geräte aus der Datenbank
-        connected_devices = load_connected_devices()
+        devices_db = load_connected_devices()
+
 
         for line in networks.splitlines():
             match = ssid_pattern.search(line)
             if match:
-                ssid = match.group(1).strip()
-                if "shelly" in ssid.lower():
-                    shelly_networks.append({"ssid": ssid, "ip": "192.168.33.1"})
+                ssid = match.group(1).strip().lower()
+                connected_device = next((device for device in devices_db if device.get("id", "").lower() == ssid), None)
+                if connected_device:
+                    connected_devices.append({"ssid": connected_device.get("id"),"name": connected_device.get("name")})
+                else:
+                    if "shelly" in ssid.lower():
+                        shelly_networks.append({"ssid": ssid, "ip": "192.168.33.1"})
 
         logger.info(f"Gefundene Shelly-Netzwerke: {shelly_networks}")
-        return shelly_networks
+        logger.info(f"Verbundene Shelly-Netzwerke: {connected_devices}")
+        return shelly_networks, connected_devices
     except Exception as e:
         logger.error("Fehler beim AP-Scan: %s", e)
         return []
@@ -47,6 +54,8 @@ def discover_shelly_ap():
 
 def connect_to_shelly_ap(data):
     ssid = data.get("ssid")
+    name = data.get("name")
+    logger.info(f"Name: {name}, SSID: {ssid}")
     ip = "192.168.33.1"
     wifi_cred = get_credentials()
     if not ssid:
@@ -88,7 +97,7 @@ def connect_to_shelly_ap(data):
                 # Neue IP im Heimnetzwerk finden
                 shelly_device = find_shelly_ip_in_lan()
                 if shelly_device:
-                    save_connected_device(shelly_data=shelly_device["info"],ip=shelly_device['ip'])  # Gerät speichern
+                    save_connected_device(shelly_data=shelly_device["info"],name= name,ip=shelly_device['ip'])  # Gerät speichern
                     logger.info(f"Shelly erfolgreich integriert. Neue IP: {shelly_device['ip']}")
 
                     # Rückverbindung zum Heim-WLAN

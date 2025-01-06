@@ -97,9 +97,11 @@ def save_wifi_credentials(data):
 
 @socketio.on('shelly_ap_scan')
 def handle_shelly_ap_scan():
-    shelly_networks = discover_shelly_ap()
-    if shelly_networks:
-        socketio.emit('ap_scan_result', shelly_networks)
+    results = discover_shelly_ap()
+    shelly_networks = results[0]
+    connected_devices = results[1]
+    if results:
+        socketio.emit('ap_scan_result', {'shelly_networks': shelly_networks,'connected_devices': connected_devices})
     else:
         logger.info("Keine Shelly-Netzwerke gefunden.")
         socketio.emit('ap_scan_result', [])
